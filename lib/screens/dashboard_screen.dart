@@ -90,22 +90,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             )
           else
-            LayoutBuilder(builder: (context, c) {
-              const gap = 16.0;
-              final columns = c.maxWidth >= 820 ? 2 : 1;
-              final width = (c.maxWidth - gap * (columns - 1)) / columns;
-              return Wrap(
-                spacing: gap,
-                runSpacing: gap,
-                children: [
-                  for (final item in items)
-                    SizedBox(
-                      width: width,
-                      child: WarrantyCard(item: item, onView: () {}, onEdit: () {}),
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var index = 0; index < items.length; index++) ...[
+                  if (index > 0) const SizedBox(height: 16),
+                  WarrantyCard(item: items[index], onView: () {}, onEdit: () {}),
                 ],
-              );
-            }),
+              ],
+            ),
         ],
       ),
     );
