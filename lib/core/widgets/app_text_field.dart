@@ -16,6 +16,7 @@ class AppTextField extends StatefulWidget {
   final Widget? suffix;
   final ValueChanged<String>? onChanged;
   final double bottomSpacing;
+  final bool compact;
 
   const AppTextField({
     super.key,
@@ -31,6 +32,7 @@ class AppTextField extends StatefulWidget {
     this.suffix,
     this.onChanged,
     this.bottomSpacing = 16,
+    this.compact = false,
   });
 
   @override
@@ -50,17 +52,22 @@ class _AppTextFieldState extends State<AppTextField> {
     Widget? prefix;
     if (widget.prefixIcon != null || widget.prefixText != null) {
       prefix = Padding(
-        padding: const EdgeInsets.only(left: 14, right: 10),
+        padding: EdgeInsets.only(
+            left: widget.compact ? 10 : 14, right: widget.compact ? 8 : 10),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.prefixIcon != null)
-              Icon(widget.prefixIcon, size: 20, color: AppColors.textSecondary),
+              Icon(widget.prefixIcon,
+                  size: widget.compact ? 16 : 20, color: AppColors.textSecondary),
             if (widget.prefixIcon != null && widget.prefixText != null)
               const SizedBox(width: 8),
             if (widget.prefixText != null)
               Text(widget.prefixText!,
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                  style: TextStyle(
+                      fontSize: widget.compact ? 12 : 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary)),
           ],
         ),
       );
@@ -70,6 +77,10 @@ class _AppTextFieldState extends State<AppTextField> {
     if (widget.isPassword) {
       suffix = IconButton(
         splashRadius: 18,
+        padding: widget.compact ? EdgeInsets.zero : null,
+        constraints: widget.compact
+            ? const BoxConstraints(minWidth: 32, minHeight: 32)
+            : null,
         icon: Icon(
           _obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
           size: 20,
@@ -89,13 +100,15 @@ class _AppTextFieldState extends State<AppTextField> {
               children: [
                 Expanded(
                   child: Text(widget.label!,
-                      style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                      style: TextStyle(
+                          fontSize: widget.compact ? 10 : 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary)),
                 ),
                 if (widget.labelTrailing != null) widget.labelTrailing!,
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: widget.compact ? 4 : 8),
           ],
           TextField(
             controller: widget.controller,
@@ -103,16 +116,21 @@ class _AppTextFieldState extends State<AppTextField> {
             keyboardType: widget.keyboardType,
             readOnly: widget.readOnly,
             onChanged: widget.onChanged,
-            style: const TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: widget.compact ? 12 : 14),
             decoration: InputDecoration(
               hintText: widget.hint,
-              hintStyle: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 14),
+              hintStyle: TextStyle(
+                  color: const Color(0xFF9CA3AF), fontSize: widget.compact ? 12 : 14),
               prefixIcon: prefix,
               prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
               suffixIcon: suffix,
+              suffixIconConstraints: widget.compact
+                  ? const BoxConstraints(minWidth: 32, minHeight: 32)
+                  : null,
               filled: true,
               fillColor: AppColors.field,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: widget.compact ? 10 : 14, vertical: widget.compact ? 8 : 16),
               border: _border(Colors.transparent),
               enabledBorder: _border(Colors.transparent),
               focusedBorder: _border(AppColors.primary, 1.5),

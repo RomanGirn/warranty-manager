@@ -7,7 +7,11 @@ class FormRow extends StatelessWidget {
   final double gap;
   final double breakpoint;
 
-  const FormRow({super.key, required this.children, this.gap = 16, this.breakpoint = 480});
+  const FormRow(
+      {super.key,
+      required this.children,
+      this.gap = 16,
+      this.breakpoint = 480});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,8 @@ class FormRow extends StatelessWidget {
         }
         return Row(crossAxisAlignment: CrossAxisAlignment.start, children: row);
       }
-      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
+      return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
     });
   }
 }
@@ -30,8 +35,15 @@ class LabeledCheckbox extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final Widget label;
+  final bool compact;
 
-  const LabeledCheckbox({super.key, required this.value, required this.onChanged, required this.label});
+  const LabeledCheckbox({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    required this.label,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +53,17 @@ class LabeledCheckbox extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 24,
-            height: 24,
+            width: compact ? 18 : 24,
+            height: compact ? 18 : 24,
             child: Checkbox(
               value: value,
               activeColor: AppColors.accent,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
               onChanged: (v) => onChanged(v ?? false),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: compact ? 6 : 10),
           Flexible(child: label),
         ],
       ),
@@ -78,7 +91,8 @@ class SettingSwitchTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(color: AppColors.field, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          color: AppColors.field, borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           Expanded(
@@ -86,14 +100,19 @@ class SettingSwitchTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 2),
                 Text(subtitle,
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSecondary)),
               ],
             ),
           ),
-          Switch(value: value, onChanged: onChanged, activeTrackColor: AppColors.accent),
+          Switch(
+              value: value,
+              onChanged: onChanged,
+              activeTrackColor: AppColors.accent),
         ],
       ),
     );
@@ -124,14 +143,17 @@ class AppDropdown extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label,
+              style:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
             value: value,
             isExpanded: true,
             borderRadius: BorderRadius.circular(12),
             dropdownColor: Colors.white,
-            icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.textSecondary),
+            icon: const Icon(Icons.keyboard_arrow_down,
+                color: AppColors.textSecondary),
             style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
             decoration: InputDecoration(
               prefixIcon: icon == null
@@ -139,11 +161,15 @@ class AppDropdown extends StatelessWidget {
                   : Icon(icon, size: 20, color: AppColors.textSecondary),
               filled: true,
               fillColor: AppColors.field,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none),
             ),
-            items: options.map((o) => DropdownMenuItem(value: o, child: Text(o))).toList(),
+            items: options
+                .map((o) => DropdownMenuItem(value: o, child: Text(o)))
+                .toList(),
             onChanged: (v) {
               if (v != null) onChanged(v);
             },
@@ -178,12 +204,15 @@ class SegmentedSelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          Text(label,
+              style:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(4),
-            decoration:
-                BoxDecoration(color: AppColors.field, borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+                color: AppColors.field,
+                borderRadius: BorderRadius.circular(12)),
             child: Row(
               children: List.generate(options.length, (i) {
                 final active = i == selected;
@@ -197,7 +226,10 @@ class SegmentedSelector extends StatelessWidget {
                         color: active ? Colors.white : Colors.transparent,
                         borderRadius: BorderRadius.circular(9),
                         boxShadow: active
-                            ? const [BoxShadow(color: Color(0x14000000), blurRadius: 6)]
+                            ? const [
+                                BoxShadow(
+                                    color: Color(0x14000000), blurRadius: 6)
+                              ]
                             : null,
                       ),
                       child: Row(
@@ -205,13 +237,17 @@ class SegmentedSelector extends StatelessWidget {
                         children: [
                           Icon(icons[i],
                               size: 16,
-                              color: active ? AppColors.accent : AppColors.textSecondary),
+                              color: active
+                                  ? AppColors.accent
+                                  : AppColors.textSecondary),
                           const SizedBox(width: 6),
                           Text(options[i],
                               style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  color: active ? AppColors.accent : AppColors.textSecondary)),
+                                  color: active
+                                      ? AppColors.accent
+                                      : AppColors.textSecondary)),
                         ],
                       ),
                     ),
@@ -241,11 +277,14 @@ class PageTitle extends StatelessWidget {
         children: [
           Text(title,
               style: const TextStyle(
-                  fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary)),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
             Text(subtitle!,
-                style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+                style: const TextStyle(
+                    fontSize: 14, color: AppColors.textSecondary)),
           ],
         ],
       ),

@@ -82,18 +82,21 @@ class PasswordStrengthBar extends StatelessWidget {
 /// "8+ символів / Цифри / Спецсимволи" checklist.
 class PasswordRequirements extends StatelessWidget {
   final String password;
-  const PasswordRequirements({super.key, required this.password});
+  final bool compact;
+  const PasswordRequirements({super.key, required this.password, this.compact = false});
 
   Widget _item(String text, bool ok) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(ok ? Icons.check_circle : Icons.radio_button_unchecked,
-            size: 16, color: ok ? AppColors.accent : AppColors.textSecondary),
-        const SizedBox(width: 6),
+            size: compact ? 14 : 16, color: ok ? AppColors.accent : AppColors.textSecondary),
+        SizedBox(width: compact ? 4 : 6),
         Text(text,
-            style: const TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+            style: TextStyle(
+                fontSize: compact ? 10 : 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary)),
       ],
     );
   }
@@ -102,11 +105,11 @@ class PasswordRequirements extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 14, vertical: compact ? 5 : 12),
       decoration: BoxDecoration(color: AppColors.field, borderRadius: BorderRadius.circular(12)),
       child: Wrap(
-        spacing: 24,
-        runSpacing: 8,
+        spacing: compact ? 8 : 24,
+        runSpacing: compact ? 4 : 8,
         alignment: WrapAlignment.spaceBetween,
         children: [
           _item('8+ символів', PasswordRules.hasLength(password)),

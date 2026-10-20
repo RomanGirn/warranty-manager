@@ -24,22 +24,65 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final score = PasswordRules.score(_password.text);
 
     return AuthLayout(
-      maxWidth: 640,
+      maxWidth: 1500,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      headerSpacing: 14,
+      footerSpacing: 8,
       header: Row(
         children: [
-          const BrandLogo(size: 44),
-          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
+                Container(
+                  width: 36,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE9D8FF),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.verified_user_outlined,
+                      size: 11, color: AppColors.primaryDark),
+                ),
+                const SizedBox(height: 10),
                 Text('Створіть акаунт',
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+                    style:
+                        TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
                 SizedBox(height: 2),
                 Text('Приєднайтесь до Менеджера гарантій',
-                    style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+                    style: TextStyle(
+                        fontSize: 13, color: AppColors.textSecondary)),
               ],
             ),
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 18,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.more_horiz,
+                      size: 12, color: AppColors.border),
+                ],
+              ),
+              const SizedBox(height: 9),
+              Container(
+                padding: const EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                  color: AppColors.infoBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.lock_outline,
+                    size: 14, color: AppColors.accent),
+              ),
+            ],
           ),
         ],
       ),
@@ -48,72 +91,93 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         action: 'Увійти',
         onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
       ),
-      child: AppCard(
-        padding: const EdgeInsets.all(28),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const FormRow(children: [
-              AppTextField(label: "Ім'я", hint: 'Олександр', prefixIcon: Icons.badge_outlined),
-              AppTextField(label: 'Прізвище', hint: 'Коваленко', prefixIcon: Icons.person_outline),
-            ]),
-            AppTextField(
-              label: 'Електронна пошта',
-              hint: 'alex@example.com',
-              prefixIcon: Icons.mail_outline,
-              keyboardType: TextInputType.emailAddress,
-              labelTrailing: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.circle, size: 7, color: AppColors.accent),
-                  SizedBox(width: 4),
-                  Text('Вільний e-mail',
-                      style: TextStyle(fontSize: 11, color: AppColors.accent)),
-                ],
-              ),
-              suffix: const Padding(
-                padding: EdgeInsets.only(right: 12),
-                child: Icon(Icons.check_circle, size: 20, color: AppColors.info),
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppCard(
+            padding: const EdgeInsets.all(28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const FormRow(children: [
+                  AppTextField(
+                      label: "Ім'я",
+                      hint: 'Олександр',
+                      prefixIcon: Icons.badge_outlined,
+                      bottomSpacing: 10),
+                  AppTextField(
+                      label: 'Прізвище',
+                      hint: 'Коваленко',
+                      prefixIcon: Icons.person_outline,
+                      bottomSpacing: 10),
+                ]),
+                AppTextField(
+                  label: 'Електронна пошта',
+                  hint: 'alex@example.com',
+                  prefixIcon: Icons.mail_outline,
+                  keyboardType: TextInputType.emailAddress,
+                  labelTrailing: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.circle, size: 7, color: AppColors.accent),
+                      SizedBox(width: 4),
+                      Text('Вільний e-mail',
+                          style:
+                              TextStyle(fontSize: 11, color: AppColors.accent)),
+                    ],
+                  ),
+                  suffix: const Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: Icon(Icons.check_circle,
+                        size: 20, color: AppColors.info),
+                  ),
+                  bottomSpacing: 10,
+                ),
+                const AppTextField(
+                  label: 'Номер телефону',
+                  hint: '67 123 45 67',
+                  prefixIcon: Icons.phone_outlined,
+                  prefixText: '+380',
+                  keyboardType: TextInputType.phone,
+                  bottomSpacing: 10,
+                ),
+                AppTextField(
+                  label: 'Пароль',
+                  hint: '••••••••••••',
+                  prefixIcon: Icons.lock_outline,
+                  isPassword: true,
+                  controller: _password,
+                  onChanged: (_) => setState(() {}),
+                  bottomSpacing: 8,
+                  labelTrailing: Text(
+                    score == 0 ? '' : '${PasswordRules.label(score)} рівень',
+                    style: TextStyle(
+                        fontSize: 11, color: PasswordRules.color(score)),
+                  ),
+                ),
+                PasswordRequirements(password: _password.text),
+                const SizedBox(height: 16),
+                LabeledCheckbox(
+                  value: _accepted,
+                  onChanged: (v) => setState(() => _accepted = v),
+                  label: const Text(
+                      'Приймаю умови обслуговування та політику приватності',
+                      style: TextStyle(fontSize: 13, color: AppColors.accent)),
+                ),
+                const SizedBox(height: 20),
+                PrimaryButton(
+                  text: 'Зареєструватися',
+                  icon: Icons.arrow_forward,
+                  iconAfter: true,
+                  height: 48,
+                  // No validation: goes straight to login.
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/login'),
+                ),
+              ],
             ),
-            const AppTextField(
-              label: 'Номер телефону',
-              hint: '67 123 45 67',
-              prefixIcon: Icons.phone_outlined,
-              prefixText: '+380',
-              keyboardType: TextInputType.phone,
-            ),
-            AppTextField(
-              label: 'Пароль',
-              hint: '••••••••••••',
-              prefixIcon: Icons.lock_outline,
-              isPassword: true,
-              controller: _password,
-              onChanged: (_) => setState(() {}),
-              bottomSpacing: 12,
-              labelTrailing: Text(
-                score == 0 ? '' : '${PasswordRules.label(score)} рівень',
-                style: TextStyle(fontSize: 11, color: PasswordRules.color(score)),
-              ),
-            ),
-            PasswordRequirements(password: _password.text),
-            const SizedBox(height: 16),
-            LabeledCheckbox(
-              value: _accepted,
-              onChanged: (v) => setState(() => _accepted = v),
-              label: const Text('Приймаю умови обслуговування та політику приватності',
-                  style: TextStyle(fontSize: 13, color: AppColors.accent)),
-            ),
-            const SizedBox(height: 20),
-            PrimaryButton(
-              text: 'Зареєструватися',
-              icon: Icons.arrow_forward,
-              iconAfter: true,
-              // No validation: goes straight to login.
-              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

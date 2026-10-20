@@ -33,12 +33,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return AppShell(
       currentIndex: 0,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.accent,
         foregroundColor: Colors.white,
+        shape: const CircleBorder(),
         onPressed: () {},
-        icon: const Icon(Icons.add),
-        label: const Text('Додати товар'),
+        tooltip: 'Додати товар',
+        child: const Icon(Icons.add),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

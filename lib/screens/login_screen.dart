@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthLayout(
-      maxWidth: 640,
+      maxWidth: 1500,
       header: Column(
         children: [
           const BrandLogo(size: 56),
