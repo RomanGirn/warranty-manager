@@ -28,12 +28,14 @@ void showAppToast(
       width: screenWidth < 452 ? screenWidth - 32 : 420,
       duration: const Duration(seconds: 3),
       content: Container(
-        padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+        padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
         decoration: BoxDecoration(
-          color: const Color(0xFF111827),
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border),
           boxShadow: const [
-            BoxShadow(color: Color(0x33000000), blurRadius: 24, offset: Offset(0, 8)),
+            BoxShadow(
+                color: Color(0x1A111827), blurRadius: 24, offset: Offset(0, 8)),
           ],
         ),
         child: Row(
@@ -55,18 +57,22 @@ void showAppToast(
                 children: [
                   Text(message,
                       style: const TextStyle(
-                          color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600)),
+                          color: AppColors.textPrimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700)),
                   if (subtitle != null) ...[
                     const SizedBox(height: 2),
                     Text(subtitle,
-                        style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 12)),
+                        style: const TextStyle(
+                            color: AppColors.textSecondary, fontSize: 12)),
                   ],
                 ],
               ),
             ),
             IconButton(
               splashRadius: 18,
-              icon: const Icon(Icons.close, size: 18, color: Color(0xFF9CA3AF)),
+              icon: const Icon(Icons.close,
+                  size: 18, color: AppColors.textSecondary),
               onPressed: messenger.hideCurrentSnackBar,
             ),
           ],

@@ -147,31 +147,55 @@ class AppDropdown extends StatelessWidget {
               style:
                   const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
-            value: value,
-            isExpanded: true,
-            borderRadius: BorderRadius.circular(12),
-            dropdownColor: Colors.white,
-            icon: const Icon(Icons.keyboard_arrow_down,
+          DropdownMenu<String>(
+            initialSelection: value,
+            expandedInsets: EdgeInsets.zero,
+            leadingIcon: icon == null
+                ? null
+                : Icon(icon, size: 20, color: AppColors.textSecondary),
+            trailingIcon: const Icon(Icons.keyboard_arrow_down_rounded,
                 color: AppColors.textSecondary),
-            style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
-            decoration: InputDecoration(
-              prefixIcon: icon == null
-                  ? null
-                  : Icon(icon, size: 20, color: AppColors.textSecondary),
+            textStyle:
+                const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+            inputDecorationTheme: InputDecorationTheme(
               filled: true,
               fillColor: AppColors.field,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none),
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide:
+                    const BorderSide(color: AppColors.primary, width: 1.5),
+              ),
             ),
-            items: options
-                .map((o) => DropdownMenuItem(value: o, child: Text(o)))
+            menuStyle: MenuStyle(
+              backgroundColor:
+                  const WidgetStatePropertyAll<Color>(Colors.white),
+              elevation: const WidgetStatePropertyAll<double>(8),
+              shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
+              ),
+              padding: const WidgetStatePropertyAll<EdgeInsets>(
+                EdgeInsets.symmetric(vertical: 6),
+              ),
+            ),
+            dropdownMenuEntries: options
+                .map((option) => DropdownMenuEntry<String>(
+                      value: option,
+                      label: option,
+                    ))
                 .toList(),
-            onChanged: (v) {
-              if (v != null) onChanged(v);
+            onSelected: (selected) {
+              if (selected != null) onChanged(selected);
             },
           ),
         ],

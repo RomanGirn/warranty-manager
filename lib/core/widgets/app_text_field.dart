@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Styled text input with an optional label, prefix icon/text and
-/// built-in show/hide toggle for passwords.
+/// Styled text input with an optional label, prefix icon/text,
+/// validation support, and built-in show/hide toggle for passwords.
 class AppTextField extends StatefulWidget {
   final String? label;
   final String? hint;
@@ -15,6 +15,7 @@ class AppTextField extends StatefulWidget {
   final Widget? labelTrailing;
   final Widget? suffix;
   final ValueChanged<String>? onChanged;
+  final FormFieldValidator<String>? validator;
   final double bottomSpacing;
   final bool compact;
 
@@ -31,6 +32,7 @@ class AppTextField extends StatefulWidget {
     this.labelTrailing,
     this.suffix,
     this.onChanged,
+    this.validator,
     this.bottomSpacing = 16,
     this.compact = false,
   });
@@ -42,7 +44,8 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   bool _obscure = true;
 
-  OutlineInputBorder _border(Color color, [double width = 1]) => OutlineInputBorder(
+  OutlineInputBorder _border(Color color, [double width = 1]) =>
+      OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(color: color, width: width),
       );
@@ -59,7 +62,8 @@ class _AppTextFieldState extends State<AppTextField> {
           children: [
             if (widget.prefixIcon != null)
               Icon(widget.prefixIcon,
-                  size: widget.compact ? 16 : 20, color: AppColors.textSecondary),
+                  size: widget.compact ? 16 : 20,
+                  color: AppColors.textSecondary),
             if (widget.prefixIcon != null && widget.prefixText != null)
               const SizedBox(width: 8),
             if (widget.prefixText != null)
@@ -110,19 +114,23 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             SizedBox(height: widget.compact ? 4 : 8),
           ],
-          TextField(
+          TextFormField(
             controller: widget.controller,
             obscureText: widget.isPassword && _obscure,
             keyboardType: widget.keyboardType,
             readOnly: widget.readOnly,
             onChanged: widget.onChanged,
+            validator: widget.validator,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: TextStyle(fontSize: widget.compact ? 12 : 14),
             decoration: InputDecoration(
               hintText: widget.hint,
               hintStyle: TextStyle(
-                  color: const Color(0xFF9CA3AF), fontSize: widget.compact ? 12 : 14),
+                  color: const Color(0xFF9CA3AF),
+                  fontSize: widget.compact ? 12 : 14),
               prefixIcon: prefix,
-              prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+              prefixIconConstraints:
+                  const BoxConstraints(minWidth: 0, minHeight: 0),
               suffixIcon: suffix,
               suffixIconConstraints: widget.compact
                   ? const BoxConstraints(minWidth: 32, minHeight: 32)
@@ -130,10 +138,14 @@ class _AppTextFieldState extends State<AppTextField> {
               filled: true,
               fillColor: AppColors.field,
               contentPadding: EdgeInsets.symmetric(
-                  horizontal: widget.compact ? 10 : 14, vertical: widget.compact ? 8 : 16),
+                  horizontal: widget.compact ? 10 : 14,
+                  vertical: widget.compact ? 8 : 16),
               border: _border(Colors.transparent),
               enabledBorder: _border(Colors.transparent),
               focusedBorder: _border(AppColors.primary, 1.5),
+              errorBorder: _border(Colors.redAccent, 1.2),
+              focusedErrorBorder: _border(Colors.redAccent, 1.5),
+              errorStyle: const TextStyle(fontSize: 11, color: Colors.redAccent),
             ),
           ),
         ],
